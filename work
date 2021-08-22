@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>work</title>
+		<script src="../js/vue.js"></script>
+		<style>
+			#box>span{
+				display: inline-block;
+				width:60px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				
+			}
+			#box span{
+				display: inline-block;
+				width:80px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+			}
+			#box .inp{
+				width:60px;
+				height: 18px;
+				line-height: 30px;
+				text-align: center;
+				
+			}
+			#box .delete{
+				display: inline-block;
+				width:60px;
+				height: 23px;
+				line-height:23px;
+				text-align: center;
+				border: 1px solid black;
+			}
+			.allPricr{
+				margin-left: 300px;
+				margin-top: 10px;
+				font-size: 20px;
+				color: red;
+			}
+			#box .span{
+				display: inline;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<span class="name">名称</span>
+			<span class="price" @click="sort()">价格<span class="span" v-if="flag1">{{jiantou}}</span></span> 
+			<span class="count">库存</span> 
+			<div v-for="(shop,index) in shops">
+				<span class="name">{{shop.name}}</span> 
+				<span class="price">{{shop.price}}/kg</span> 
+				<span class="count">{{shop.count}}</span> 
+				<button @click="decrease(index)"  class="decrease">-</button>
+				<input class="inp" :placeholder="shop.num" />
+				<button @click="add(index)" class="add">+</button>
+				<span @click="del(index)" class="delete">删除</span>
+			</div>
+			<div class="allPricr">总价：{{allPrice}}</div>
+		</div>
+	</body>
+	<script>
+		const vue = new Vue({
+			el:"#box",
+			data:{
+				shops:[{name:"苹果",price:"3",count:20,num:5},{name:"香蕉",price:"2",count:15,num:8},{name:"梨子",price:"5",count:25,num:3},{name:"西瓜",price:"4",count:10,num:1},{name:"山楂",price:"1",count:50,num:15},{name:"火龙果",price:"6",count:20,num:4},{name:"草莓",price:"10",count:20,num:2},{name:"山竹",price:"15",count:20,num:5},],
+				flag:true,
+				flag1:false,
+				jiantou:"👆"
+			},
+			computed:{
+				allPrice(){
+					let sum = 0
+					 this.shops.forEach(function(item){
+						 sum += item.price * item.num
+					 })
+					return sum	
+				}
+			},
+			methods:{
+				del(index){
+					this.shops.splice(index,1)
+				},
+				decrease(index){
+					if(this.shops[index].num >0){
+						this.shops[index].num--
+					}
+				},
+				add(index){
+					if(this.shops[index].num < this.shops[index].count){
+						this.shops[index].num++
+					}
+				},
+				sort(){
+					
+					if(this.flag){
+						this.shops.sort(function(a,b){
+							return a.price - b.price
+						})
+						this.flag1 = true
+						this.jiantou = "👆"
+						this.flag = false
+					}else{
+						this.shops.sort(function(a,b){
+							return b.price - a.price
+						})
+						this.jiantou = "👇"
+						this.flag = true
+					}
+				},
+				
+			}
+		})
+		Array.prototype.remove = function(val) { 
+		var index = this.indexOf(val); 
+		if (index > -1) { 
+			this.splice(index, 1); 
+			} 
+		};
+	</script>
+</html>
